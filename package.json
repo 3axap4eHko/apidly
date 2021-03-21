@@ -1,0 +1,34 @@
+{
+  "name": "apidly",
+  "version": "0.0.1",
+  "description": "Node and Browser API module",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3axap4eHko/apidly.git"
+  },
+  "keywords": [],
+  "author": "Ivan Zakharchanka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/3axap4eHko/apidly/issues"
+  },
+  "homepage": "https://github.com/3axap4eHko/apidly#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.21",
+    "@types/node": "^14.14.35",
+    "@types/node-fetch": "^2.5.8",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.4",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "cross-fetch": "^3.1.2",
+    "evnty": "^0.6.3",
+    "path-to-regexp": "^6.2.0"
+  }
+}

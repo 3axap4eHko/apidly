@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": true,
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable"
+    ],
+    "rootDir": "src",
+    "outDir": "build"
+  },
+  "include": [
+    "src/*.ts"
+, "src/Request.ts"  ],
+  "exclude": [
+    "node_modules",
+    "src/**/__tests__",
+    "src/**/__fixtures__",
+    "src/**/__mocks__"
+  ]
+}
