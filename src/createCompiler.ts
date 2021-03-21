@@ -2,7 +2,7 @@ import * as PTR from 'path-to-regexp';
 import { RequestParameters } from './Request';
 
 export interface CompileURL {
-  (params: RequestParameters): string;
+  (params: RequestParameters): URL;
 }
 
 function omit(data: any, keys: string[]) {
@@ -30,6 +30,6 @@ export default function createCompiler(route: string, base: string): CompileURL 
         url.searchParams.set(name, value);
       }
     }
-    return url.href;
+    return url;
   };
 }

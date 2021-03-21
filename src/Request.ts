@@ -24,12 +24,12 @@ export interface RequestMiddleware {
 }
 
 export class Request {
-  #url: string;
+  #url: URL;
   #method: string;
   #headers: Headers;
   #body: BodyInit;
 
-  constructor(url: string, options: RequestOptions) {
+  constructor(url: URL, options: RequestOptions) {
     this.#url = url;
     this.#method = options.method;
     this.#headers = options.headers;

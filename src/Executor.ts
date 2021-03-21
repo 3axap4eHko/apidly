@@ -34,7 +34,7 @@ export async function execute({ method, compile, events, middlewares }: Executor
   const init = request.getInit();
   try {
     events.start();
-    const response = await fetch(url, init);
+    const response = await fetch(url.href, init);
 
     if (response.status === 404) {
       throw new Error(response.statusText);

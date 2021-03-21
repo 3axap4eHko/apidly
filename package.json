@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/3axap4eHko/apidly.git"
   },
-  "keywords": [],
+  "keywords": ["rest", "rest-client", "api", "api-client", "client", "http", "fetch", "node", "browser"],
   "author": "Ivan Zakharchanka",
   "license": "MIT",
   "bugs": {
