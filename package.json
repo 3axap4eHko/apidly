@@ -1,6 +1,6 @@
 {
   "name": "apidly",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Node and Browser API module",
   "main": "build/index.js",
   "scripts": {
