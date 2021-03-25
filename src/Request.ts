@@ -48,6 +48,10 @@ export class Request {
     return this.#body;
   }
 
+  get(name: string) {
+    return this.#headers.get(name);
+  }
+
   set(name: string, value: string) {
     this.#headers.set(name, value);
 

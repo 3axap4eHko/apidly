@@ -32,7 +32,7 @@ export class Client extends Callable {
     this.#middlewares = middlewares;
   }
 
-  get host() {
+  get base() {
     return this.#base;
   }
 

@@ -5,7 +5,8 @@
   "main": "build/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "test:cov": "CI=1 jest"
   },
   "repository": {
     "type": "git",

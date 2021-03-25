@@ -1,5 +1,9 @@
 # APIDLY
 
+ Executor.ts       |   82.61 |       60 |     100 |   82.61 | 31,40,45,50
+ credentials.ts    |   66.67 |      100 |      50 |   66.67 | 16
+ endpoint.ts       |   86.67 |        0 |      60 |   86.67 | 23,31
+
 Node and Browser API module.
 
 [![Coverage Status][codecov-image]][codecov-url]
@@ -48,6 +52,6 @@ Copyright (c) 2021 Ivan Zakharchanka
 [github-url]: https://github.com/3axap4eHko/apidly/actions/workflows/cicd.yml
 [github-image]: https://github.com/3axap4eHko/apidly/actions/workflows/cicd.yml/badge.svg
 [codecov-url]: https://codecov.io/gh/3axap4eHko/apidly
-[codecov-image]: https://img.shields.io/codecov/c/github/3axap4eHko/apidly/master.svg?maxAge=43200
+[codecov-image]: https://codecov.io/gh/3axap4eHko/apidly/branch/master/graph/badge.svg?token=JZ8QCGH6PI
 [snyk-url]: https://snyk.io/test/npm/apidly/latest
 [snyk-image]: https://img.shields.io/snyk/vulnerabilities/github/3axap4eHko/apidly.svg?maxAge=43200
