@@ -1,9 +1,5 @@
 # APIDLY
 
- Executor.ts       |   82.61 |       60 |     100 |   82.61 | 31,40,45,50
- credentials.ts    |   66.67 |      100 |      50 |   66.67 | 16
- endpoint.ts       |   86.67 |        0 |      60 |   86.67 | 23,31
-
 Node and Browser API module.
 
 [![Coverage Status][codecov-image]][codecov-url]
