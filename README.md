@@ -2,10 +2,11 @@
 
 Node and Browser API module.
 
-[![Coverage Status][codecov-image]][codecov-url]
 [![Build Status][github-image]][github-url]
 [![NPM version][npm-image]][npm-url]
 [![Downloads][downloads-image]][npm-url]
+[![Coverage Status][codecov-image]][codecov-url]
+[![Maintainability][codeclimate-image]][codeclimate-url]
 [![Snyk][snyk-image]][snyk-url]
 
 ## Usage
@@ -49,5 +50,7 @@ Copyright (c) 2021 Ivan Zakharchanka
 [github-image]: https://github.com/3axap4eHko/apidly/actions/workflows/cicd.yml/badge.svg
 [codecov-url]: https://codecov.io/gh/3axap4eHko/apidly
 [codecov-image]: https://codecov.io/gh/3axap4eHko/apidly/branch/master/graph/badge.svg?token=JZ8QCGH6PI
+[codeclimate-url]: https://codeclimate.com/github/3axap4eHko/apidly/maintainability
+[codeclimate-image]: https://api.codeclimate.com/v1/badges/0ba20f27f6db2b0fec8c/maintainability
 [snyk-url]: https://snyk.io/test/npm/apidly/latest
 [snyk-image]: https://img.shields.io/snyk/vulnerabilities/github/3axap4eHko/apidly.svg?maxAge=43200
