@@ -1,0 +1,69 @@
+name: CI/CD
+
+on:
+  schedule:
+    - cron: 0 0 * * *
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: https://registry.npmjs.org/
+
+      - name: Environment log
+        id: env
+        run: |
+          node --version
+          yarn --version
+
+      - name: Install dependecies
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Upgrade
+        id: updates
+        run: |
+          echo "::set-output name=PENDING::$(yarn outdated --json|tail -1|jq '.data.body'|jq length)"
+          yarn upgrade
+          echo "::set-output name=DONE::$(yarn outdated --json|tail -1|jq '.data.body'|jq length)"
+
+      - name: Run build process
+        if: steps.updates.PENDING != steps.updates.DONE
+        run: |
+          yarn build
+
+      - name: Run tests
+        if: steps.updates.PENDING != steps.updates.DONE
+        run: |
+          yarn test
+
+      - name: Commit updates
+        if: steps.updates.PENDING != steps.updates.DONE
+        run: |
+          git add --all
+          git commit -am "autoupdate"
+          npm version patch
+
+      - name: Publish
+        if: steps.updates.PENDING != steps.updates.DONE
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+          npm publish
+          git push
+          git push --tags
+
+      - name: Push updates
+        if: steps.updates.PENDING != steps.updates.DONE
+        run: |
+          git push
+          git push --tags
