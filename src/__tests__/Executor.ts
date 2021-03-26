@@ -46,21 +46,17 @@ describe('Executor test suite', () => {
     expect(middleware).toHaveBeenCalled();
   });
 
-  it('Should call middlewares on execution', async () => {
-    const { executor, middleware } = createExecutor();
-    await executor();
-    expect(middleware).toHaveBeenCalled();
-  });
-
   it('Should call events on execution', async () => {
     const { executor, events } = createExecutor();
-    const response = new Response(JSON.stringify(null));
+    const responseData = { test: 'value' }
+    const response = new Response(JSON.stringify(responseData));
     mockFetch(response);
 
-    await executor();
+    const result = await executor();
     expect(events.error).not.toHaveBeenCalled();
     expect(events.start).toHaveBeenCalled();
     expect(events.done).toHaveBeenCalled();
+    expect(result).toEqual(responseData);
   });
 
   it('Should call error event on 404', async () => {
