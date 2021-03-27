@@ -53,6 +53,8 @@ jobs:
       - name: Commit updates
         if: steps.updates.outputs.PENDING != steps.updates.outputs.DONE
         run: |
+          git config --global user.email "3axap4eHko@github.com"
+          git config --global user.name "Ivan Zakharchanka"
           git add --all
           git commit -am "autoupdate"
           npm version patch
