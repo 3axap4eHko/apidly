@@ -34,29 +34,31 @@ jobs:
       - name: Upgrade
         id: updates
         run: |
-          echo "::set-output name=PENDING::$(yarn outdated --json|tail -1|jq '.data.body'|jq length)"
+          PENDING=$(yarn outdated --json|tail -1|jq '.data.body'|jq length)
+          echo "::set-output name=PENDING::$PENDING"
           yarn upgrade
-          echo "::set-output name=DONE::$(yarn outdated --json|tail -1|jq '.data.body'|jq length)"
+          DONE=$(yarn outdated --json|tail -1|jq '.data.body'|jq length)
+          echo "::set-output name=DONE::$DONE"
 
       - name: Run build process
-        if: steps.updates.PENDING != steps.updates.DONE
+        if: steps.updates.outputs.PENDING != steps.updates.outputs.DONE
         run: |
           yarn build
 
       - name: Run tests
-        if: steps.updates.PENDING != steps.updates.DONE
+        if: steps.updates.outputs.PENDING != steps.updates.outputs.DONE
         run: |
           yarn test
 
       - name: Commit updates
-        if: steps.updates.PENDING != steps.updates.DONE
+        if: steps.updates.outputs.PENDING != steps.updates.outputs.DONE
         run: |
           git add --all
           git commit -am "autoupdate"
           npm version patch
 
       - name: Publish
-        if: steps.updates.PENDING != steps.updates.DONE
+        if: steps.updates.outputs.PENDING != steps.updates.outputs.DONE
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
           npm publish
@@ -64,7 +66,7 @@ jobs:
           git push --tags
 
       - name: Push updates
-        if: steps.updates.PENDING != steps.updates.DONE
+        if: steps.updates.outputs.PENDING != steps.updates.outputs.DONE
         run: |
           git push
           git push --tags
