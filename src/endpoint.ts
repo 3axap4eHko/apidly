@@ -12,7 +12,7 @@ export class Endpoint extends Callbable {
   #method: string;
   #middleware: RequestMiddleware;
 
-  constructor(route: string, { method = 'get', middleware }: EndpointOptions) {
+  constructor(route: string, { method = 'get', middleware }: EndpointOptions = {}) {
     super(createCompiler.bind(null, route));
     this.#route = route;
     this.#method = method;
