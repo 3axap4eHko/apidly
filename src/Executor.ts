@@ -18,7 +18,7 @@ export interface ExecutorParameters {
 }
 
 export async function execute({ method, compile, events, middlewares }: ExecutorOptions, { params, body, credentials }: ExecutorParameters = {}) {
-  const url = compile(params);
+  const url = compile(params || {});
   const headers = new Headers();
   const request = new Request(url, {
     method,

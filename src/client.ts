@@ -16,7 +16,7 @@ function createExecutor(client: ClientOptions, events: Events, middlewares: Requ
     method: endpoint.method,
     compile,
     events,
-    middlewares,
+    middlewares: [...middlewares, endpoint.middleware].filter(Boolean),
   });
 }
 
