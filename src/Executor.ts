@@ -14,12 +14,13 @@ export interface ExecutorOptions {
 export interface ExecutorParameters {
   params?: RequestParameters;
   body?: BodyInit;
+  headers?: HeadersInit;
   credentials?: any;
 }
 
-export async function execute({ method, compile, events, middlewares }: ExecutorOptions, { params, body, credentials }: ExecutorParameters = {}) {
+export async function execute({ method, compile, events, middlewares }: ExecutorOptions, { params, body, headers: headersInit , credentials }: ExecutorParameters = {}) {
   const url = compile(params || {});
-  const headers = new Headers();
+  const headers = new Headers(headersInit);
   const request = new Request(url, {
     method,
     headers,
