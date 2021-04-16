@@ -573,9 +573,9 @@
     form-data "^3.0.0"
 
 "@types/node@*", "@types/node@^14.14.35":
-  version "14.14.39"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.39.tgz#9ef394d4eb52953d2890e4839393c309aa25d2d1"
-  integrity sha512-Qipn7rfTxGEDqZiezH+wxqWYR8vcXq5LRpZrETD19Gs4o8LbklbmqotSUsMU+s5G3PJwMRDfNEYoxrcBwIxOuw==
+  version "14.14.41"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.41.tgz#d0b939d94c1d7bd53d04824af45f1139b8c45615"
+  integrity sha512-dueRKfaJL4RTtSa7bWeTK1M+VH+Gns73oCgzvYfHZywRCoPSd8EkXBL0mZ9unPTveBn+D9phZBaxuzpwjWkW0g==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -1302,9 +1302,9 @@ esutils@^2.0.2:
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
 evnty@^0.6.3:
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/evnty/-/evnty-0.6.5.tgz#cef11803a346899b29c52c5cf5be1d3484082a15"
-  integrity sha512-GBqaKRHkXUCiMCfj9ggk9grkblLyhHF3w1FZoAKQpAWS5dtDtd4YeP8VFpLaeGcbht3LVpUvrkt6WduQXxDeAA==
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/evnty/-/evnty-0.6.6.tgz#d8c6729ef87088f38f56e9efa267ee6d69f97ef0"
+  integrity sha512-lB+wUxqKjOud9T0q50J4vW3Ea34nzejfmt2kZ+LKhmvFLqpzpN8SS79JOCp5L+PieDNiDwLOzyp6/0gCaTKJlg==
 
 exec-sh@^0.3.2:
   version "0.3.6"
@@ -3431,9 +3431,9 @@ tr46@^2.0.2:
     punycode "^2.1.1"
 
 ts-jest@^26.5.4:
-  version "26.5.4"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-26.5.4.tgz#207f4c114812a9c6d5746dd4d1cdf899eafc9686"
-  integrity sha512-I5Qsddo+VTm94SukBJ4cPimOoFZsYTeElR2xy6H2TOVs+NsvgYglW8KuQgKoApOKuaU/Ix/vrF9ebFZlb5D2Pg==
+  version "26.5.5"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-26.5.5.tgz#e40481b6ee4dd162626ba481a2be05fa57160ea5"
+  integrity sha512-7tP4m+silwt1NHqzNRAPjW1BswnAhopTdc2K3HEkRZjF0ZG2F/e/ypVH0xiZIMfItFtD3CX0XFbwPzp9fIEUVg==
   dependencies:
     bs-logger "0.x"
     buffer-from "1.x"
