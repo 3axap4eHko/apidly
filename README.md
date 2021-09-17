@@ -11,6 +11,29 @@ Node and Browser API module.
 
 ## Usage
 
+### General Example
+
+```typescript
+import { createClient, createEndpoint } from 'apidly';
+
+const client = createClient({ base: 'https://example.com' });
+
+const postsSearchEndpoint = createEndpoint('/api/v1/posts?search=:searchParam&page=:pageParam&count=:countParam');
+
+const postSearchRequest = client(postsSearchEndpoint);
+
+export function searchPosts(search: string, page: number, count: number = 20) {
+  return postSearchRequest({
+    params: {
+      searchParam: search,
+      pageParam: page,
+      countParam: count,
+    },
+  });
+}
+```
+
+### Advanced Example
 ```typescript
 import { createClient, createEndpoint, Request, Parameters } from 'apidly';
 
