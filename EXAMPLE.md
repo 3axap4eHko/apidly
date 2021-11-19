@@ -14,52 +14,32 @@ Node and Browser API module.
 ### General Example
 
 ```typescript
-import { createAPI, APIRequest } from 'apidly';
-
-const api = createAPI({ base: '{region}' });
-api.use(async (req: APIRequest) => {
-
-});
-
-const postSearchRequest = api.request('/api/v1/posts?search={searchParam}&page={pageParam}&count={countParam}');
-
-export function searchPosts(search: string, page: number, count: number = 20) {
-  return postSearchRequest({
-    params: {
-      searchParam: search,
-      pageParam: page,
-      countParam: count,
-    },
-  });
-}
-```
-
-### General Example
-
-```typescript
 import { createClient, createEndpoint } from 'apidly';
 
 const client = createClient({ base: 'https://:region.example.com' });
 
-const postsSearchEndpoint = createEndpoint('/api/v1/posts?search=:searchParam&page=:pageParam&count=:countParam');
+interface SearchParams {
+  searchParam: string;
+  pageParam: number;
+  countParam: number;
+}
 
-const postSearchRequest = client(postsSearchEndpoint);
+interface Post {
+  title: string;
+  content: string;
+}
 
-export function searchPosts(search: string, page: number, count: number = 20) {
-  return postSearchRequest({
-    params: {
-      searchParam: search,
-      pageParam: page,
-      countParam: count,
-    },
-  });
+const postsSearchEndpoint = createEndpoint<Post, SearchParams>('/api/v1/posts?search=:searchParam&page=:pageParam&count=:countParam');
+
+export function searchPosts(searchParam: string, pageParam: number, countParam: number = 20) {
+  return client(postsSearchEndpoint, { params: { searchParam, pageParam, countParam } });
 }
 ```
 
 ### Advanced Example
 
 ```typescript
-import { createClient, createEndpoint, Request, Parameters } from 'apidly';
+import { createClient, createEndpoint } from 'apidly';
 
 const client = createClient({ base: 'https://example.com' });
 // client level middleware
