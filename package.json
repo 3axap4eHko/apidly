@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "Node and Browser API module",
   "main": "build/index.js",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "test": "jest",
