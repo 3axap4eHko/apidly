@@ -33,6 +33,6 @@ export class Endpoint<Output, Params, Data> {
   }
 }
 
-export default <Output, Params, Data = void>(path: string, options?: RequestOptions<Output, Params, Data>) => {
+export default <Output, Params = any, Data = any>(path: string, options?: RequestOptions<Output, Params, Data>) => {
   return new Endpoint<Output, Params, Data>(path, options);
 };

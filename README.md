@@ -11,28 +11,60 @@ Node and Browser API module.
 
 ## Usage
 
-### General Example
+### Simple Example
 
 ```typescript
 import { createClient, createEndpoint } from 'apidly';
 
-const client = createClient({ base: 'https://:region.example.com' });
-
-interface SearchParams {
-  searchParam: string;
-  pageParam: number;
-  countParam: number;
-}
+const client = createClient({ base: 'https://api.example.com' });
 
 interface Post {
+  id: string;
   title: string;
   content: string;
 }
 
-const postsSearchEndpoint = createEndpoint<Post, SearchParams>('/api/v1/posts?search=:searchParam&page=:pageParam&count=:countParam');
+const postsListEndpoint = createEndpoint<Post[]>('/api/v1/posts');
 
-export function searchPosts(searchParam: string, pageParam: number, countParam: number = 20) {
-  return client(postsSearchEndpoint, { params: { searchParam, pageParam, countParam } });
+export const listPosts = () => client(postsSearchEndpoint);
+```
+
+### Advanced Example
+
+```typescript
+import { createClient, createEndpoint, formRequest, ApidlyRequest } from '../index';
+import { getAccessToken } from './authorization';
+
+const client = createClient({
+  base: 'https://api.example.com',
+  headers: { locale: 'en_US' }, // default client's headers
+  requestType: formRequest, // use form-urlencoded request type
+})
+  .request(async (url: URL, request: ApidlyRequest) => {
+    // custom request middleware with authentication
+    const token = await getAccessToken();
+    request.headers.set('authorization', `Bearer ${token}`);
+  });
+
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+}
+
+interface UpdatePostParams {
+  id: string;
+}
+
+interface UpdatePostData {
+  title: string;
+  content: string;
+}
+
+const postsUpdateEndpoint = createEndpoint<Post, UpdatePostParams, UpdatePostData>('/api/v1/posts/:id', { method: 'put' });
+
+export function updatePost(id: string, post: UpdatePostData) {
+  return client(postsUpdateEndpoint, { params: { id }, data: post });
 }
 ```
 

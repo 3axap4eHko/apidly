@@ -13,7 +13,7 @@ export interface RequestOptions<Output, Params, Data> extends RequestInit {
   responseType?: ResponseType<Output, Params, Data>;
 }
 
-export interface ApidlyRequest<Output, Params, Data> extends Omit<RequestOptions<Output, Params, Data>, 'headers'> {
+export interface ApidlyRequest<Output = any, Params = any, Data = any> extends Omit<RequestOptions<Output, Params, Data>, 'headers'> {
   headers: Headers;
 }
 
