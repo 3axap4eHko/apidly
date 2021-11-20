@@ -93,7 +93,7 @@ export default <Output, Params, Data>(clientOptions: ClientOptions<Output, Param
       await requestMiddleware(url, request);
     }
 
-    await events.start(request);
+    await events.start(url, request);
 
     try {
       const response = (await fetch(url.href, request)) as ApidlyResponse<Output>;
@@ -105,10 +105,10 @@ export default <Output, Params, Data>(clientOptions: ClientOptions<Output, Param
 
       return response.data;
     } catch (e) {
-      await events.error(e, request);
+      await events.error(e, url, request);
       return null;
     } finally {
-      await events.done(request);
+      await events.done(url, request);
     }
   };
 
@@ -121,9 +121,9 @@ export default <Output, Params, Data>(clientOptions: ClientOptions<Output, Param
     return client;
   };
 
-  client.onStart = (listener: (request: Request) => any) => events.start.on(listener);
-  client.onDone = (listener: (request: Request) => any) => events.done.on(listener);
-  client.onError = (listener: (error: Error, request: Request) => any) => events.error.on(listener);
+  client.onStart = (listener: (url: URL, request: ApidlyRequest<Output, Params, Data>) => any) => events.start.on(listener);
+  client.onDone = (listener: (url: URL, request: ApidlyRequest<Output, Params, Data>) => any) => events.done.on(listener);
+  client.onError = (listener: (error: Error, url: URL, request: ApidlyRequest<Output, Params, Data>) => any) => events.error.on(listener);
 
   return client;
 };
