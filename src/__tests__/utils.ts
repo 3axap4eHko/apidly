@@ -1,4 +1,4 @@
-import { pickFirstOption, omit, sanitize } from '../utils';
+import { pickFirstOption, omit, sanitize, retry, defaultRetryStrategy } from '../utils';
 
 describe('Utils test suite', () => {
   it('Should pickFirstOption if exists', () => {
@@ -9,10 +9,10 @@ describe('Utils test suite', () => {
     expect(first).toEqual(1);
   });
 
-  it('Should pickFirstOption as default if doesn\'t exists', () => {
+  it("Should pickFirstOption as default if doesn't exists", () => {
     type Data = { id?: number };
-    const data1 = { };
-    const data2 = { };
+    const data1 = {};
+    const data2 = {};
     const first = pickFirstOption<Data, number>('id', 0, data1, data2);
     expect(first).toEqual(0);
   });
@@ -35,4 +35,12 @@ describe('Utils test suite', () => {
     expect(sanitizedData).toHaveProperty('d');
   });
 
+  it('Should retry', async () => {
+    const error = new Error;
+    const fn = jest.fn(() => {
+      throw error;
+    });
+    await expect(retry(fn, defaultRetryStrategy, 1)).rejects.toEqual(error);
+    expect(fn).toHaveBeenCalledTimes(2);
+  });
 });

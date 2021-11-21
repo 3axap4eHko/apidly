@@ -1,6 +1,7 @@
 # APIDLY
 
-Node and Browser API module.
+NodeJS and Browser API client.
+In order to use with NodeJS please pick you favorite Fetch API polyfill library like [cross-fetch](https://www.npmjs.com/package/cross-fetch).
 
 [![Build Status][github-image]][github-url]
 [![NPM version][npm-image]][npm-url]
@@ -39,12 +40,12 @@ const client = createClient({
   base: 'https://api.example.com',
   headers: { locale: 'en_US' }, // default client's headers
   requestType: formRequest, // use form-urlencoded request type
-})
-  .request(async (url: URL, request: ApidlyRequest) => {
-    // custom request middleware with authentication
-    const token = await getAccessToken();
-    request.headers.set('authorization', `Bearer ${token}`);
-  });
+  maxRetries: 3, // retry count on fail
+}).request(async (url: URL, request: ApidlyRequest) => {
+  // custom request middleware with authentication
+  const token = await getAccessToken();
+  request.headers.set('authorization', `Bearer ${token}`);
+});
 
 interface Post {
   id: string;

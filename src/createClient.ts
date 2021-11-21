@@ -1,8 +1,8 @@
 import createEvent, { Unsubscribe } from 'evnty';
-import { RequestOptions, ApidlyRequest, ApidlyResponse, RequestMiddleware, ResponseMiddleware, RequestType, ResponseType } from './types';
+import { RequestOptions, ApidlyRequest, ApidlyResponse, RequestMiddleware, ResponseMiddleware, RequestType, ResponseType, RetryStrategy } from './types';
 import { Endpoint } from './createEndpoint';
 import { jsonRequest, jsonResponse } from './dataTypes';
-import { pickFirstOption, omit, sanitize } from './utils';
+import { pickFirstOption, omit, sanitize, defaultRetryStrategy, retry } from './utils';
 
 export interface ClientOptions<Output = any, Params = any, Data = any> extends RequestOptions<Output, Params, Data> {
   base: string;
@@ -29,6 +29,8 @@ export default <Output, Params, Data>(clientOptions: ClientOptions<Output, Param
     type RequestOptionsType = RequestOptions<Output, Params, Data>;
     const requestType = pickFirstOption<RequestOptionsType, RequestType<Output, Params, Data>>('requestType', jsonRequest, options, endpoint.options, clientOptions as any);
     const responseType = pickFirstOption<RequestOptionsType, ResponseType<Output, Params, Data>>('responseType', jsonResponse, options, endpoint.options, clientOptions as any);
+    const maxRetries = pickFirstOption<RequestOptionsType, number>('maxRetries', 0, options, endpoint.options, clientOptions as any);
+    const retryStrategy = pickFirstOption<RequestOptionsType, RetryStrategy>('retryStrategy', defaultRetryStrategy, options, endpoint.options, clientOptions as any);
     const cache = pickFirstOption<RequestOptionsType, RequestCache>('cache', void 0, options, endpoint.options, clientOptions as any);
     const credentials = pickFirstOption<RequestOptionsType, RequestCredentials>('credentials', void 0, options, endpoint.options, clientOptions as any);
     const integrity = pickFirstOption<RequestOptionsType, string>('integrity', void 0, options, endpoint.options, clientOptions as any);
@@ -69,6 +71,8 @@ export default <Output, Params, Data>(clientOptions: ClientOptions<Output, Param
     const request = sanitize<ApidlyRequest<Output, Params, Data>>({
       requestType,
       responseType,
+      maxRetries,
+      retryStrategy,
       data,
       params,
       cache,
@@ -96,8 +100,15 @@ export default <Output, Params, Data>(clientOptions: ClientOptions<Output, Param
     await events.start(url, request);
 
     try {
-      const response = (await fetch(url.href, request)) as ApidlyResponse<Output>;
-      response.data = await responseType(response, request);
+      const response = await retry(
+        async () => {
+          const response = (await fetch(url.href, request)) as ApidlyResponse<Output>;
+          response.data = await responseType(response, request);
+          return response;
+        },
+        retryStrategy,
+        maxRetries
+      );
 
       for (const responseMiddleware of [].concat(responseMiddlewares, endpoint.responseMiddlewares)) {
         await responseMiddleware(responseMiddleware);
