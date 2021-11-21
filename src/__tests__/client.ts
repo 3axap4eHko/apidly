@@ -1,6 +1,6 @@
 import createClient, { ClientOptions } from '../createClient';
 import createEndpoint from '../createEndpoint';
-import { RequestOptions, RequestMiddleware, ResponseMiddleware } from '../types';
+import { RequestMiddleware, ResponseMiddleware } from '../types';
 
 globalThis.fetch = jest.fn();
 
@@ -15,7 +15,9 @@ function mockFetchResult(data: any) {
 }
 
 function mockFetchError(error: Error) {
-  return (<jest.MockedFunction<typeof fetch>>fetch).mockReturnValue(Promise.reject(error));
+  return (<jest.MockedFunction<typeof fetch>>fetch).mockImplementation(async () => {
+    throw error;
+  });
 }
 
 const BASE = 'https://localhost';
@@ -23,12 +25,12 @@ const clientOptions: ClientOptions = {
   base: BASE,
   headers: { clientHeader: '1' },
 };
-const client = createClient<any, any, any>(clientOptions);
+const client = createClient(clientOptions);
 
 describe('Use cases test suite', () => {
   it('Should call events', async () => {
-    const result = new Error();
-    const uri = '/api/v1/test';
+    const result = new Error('Client fetch error');
+    const uri = '/api/v1/test/:id';
     const fetch = mockFetchError(result);
 
     const startListener = jest.fn();
@@ -39,10 +41,10 @@ describe('Use cases test suite', () => {
     client.onError(errorListener);
     client.onDone(doneListener);
 
-    const endpoint = createEndpoint(uri);
-    const response = await client(endpoint);
+    const endpoint = createEndpoint<string, { id: number }>(uri);
+    const response = await client(endpoint, { params: { id: 1 } });
 
-    expect(fetch).toHaveBeenCalledWith(`${BASE}/api/v1/test`, expect.any(Object));
+    expect(fetch).toHaveBeenCalledWith(`${BASE}/api/v1/test/1`, expect.any(Object));
     expect(response).toEqual(null);
 
     expect(startListener).toHaveBeenCalled();
@@ -93,7 +95,10 @@ describe('Use cases test suite', () => {
     const fetch = mockFetchResult(result);
 
     type Params = { id: number; query: string; limit?: number };
-    enum Locale { EN_US = 'en_US', EN_GB = 'en_GB' };
+    enum Locale {
+      EN_US = 'en_US',
+      EN_GB = 'en_GB',
+    }
     type Data = { locale: Locale };
 
     const requestMiddleware = <jest.MockedFunction<RequestMiddleware<Output, Params, Data>>>jest.fn((url, req) => {

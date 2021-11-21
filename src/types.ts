@@ -1,3 +1,12 @@
+import { Event } from 'evnty';
+
+export class Callbable extends Function {
+  constructor(func: Function) {
+    super();
+    return Object.setPrototypeOf(func, new.target.prototype);
+  }
+}
+
 export interface RequestType<Output, Params, Data> {
   (url: URL, request: ApidlyRequest<Output, Params, Data>): Promise<void> | void;
 }
@@ -33,4 +42,15 @@ export interface RequestMiddleware<Output, Params, Data> {
 
 export interface ResponseMiddleware<Output> {
   (response: ApidlyResponse<Output>): Promise<void> | void;
+}
+
+export interface Events {
+  start: Event;
+  done: Event;
+  error: Event;
+}
+
+export interface Middlewares<Output, Params, Data> {
+  request: RequestMiddleware<Output, Params, Data>[];
+  response: ResponseMiddleware<Output>[];
 }

@@ -1,6 +1,9 @@
 import { createClient, createEndpoint } from '../index';
 
-const client = createClient({ base: 'https://virtserver.swaggerhub.com/3axap4eHko/APIDLY.IO/1.0.0/posts' });
+const client = createClient({ base: 'https://virtserver.swaggerhub.com/3axap4eHko/APIDLY.IO/1.0.0/posts' })
+  .request(() => {
+
+  });
 
 interface Post {
   id: string;
