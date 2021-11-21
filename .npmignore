@@ -4,4 +4,4 @@
 /src
 /jest.*
 /*.log*
-/tsconfig
+/tsconfig.json
