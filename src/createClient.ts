@@ -82,7 +82,7 @@ async function request<Output, Params, Data>(
     await requestType(url, request);
   }
 
-  for (const requestMiddleware of middlewares.request) {
+  for (const requestMiddleware of [].concat(middlewares.request, endpoint.middlewares.request)) {
     await requestMiddleware(url, request);
   }
 
@@ -100,7 +100,7 @@ async function request<Output, Params, Data>(
       maxRetries
     );
 
-    for (const responseMiddleware of middlewares.response) {
+    for (const responseMiddleware of [].concat(middlewares.response, endpoint.middlewares.response)) {
       await responseMiddleware(response);
     }
 

@@ -20,8 +20,8 @@ describe('Endpoint test suite', () => {
     expect(endpoint.options).toEqual(options);
     expect(endpoint.pathKeys).toEqual(['id']);
     expect(endpoint.queryKeysMap).toEqual([['fields', 'fields']]);
-    expect(endpoint.requestMiddlewares).toContain(reqMiddleware);
-    expect(endpoint.responseMiddlewares).toContain(resMiddleware);
+    expect(endpoint.middlewares.request).toContain(reqMiddleware);
+    expect(endpoint.middlewares.response).toContain(resMiddleware);
 
     const path = endpoint.compile(options.params);
     expect(path).toEqual('/post/1');

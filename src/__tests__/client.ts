@@ -128,8 +128,8 @@ describe('Use cases test suite', () => {
       .response(responseMiddleware);
 
     const response = await client(endpoint, { headers: { requestHeader: '1' }, params: { id: 1, query: 'test' }, data: { locale: Locale.EN_GB } });
-    expect(requestMiddleware).toHaveBeenCalled();
-    expect(responseMiddleware).toHaveBeenCalled();
+    expect(requestMiddleware).toHaveBeenCalledTimes(2);
+    expect(responseMiddleware).toHaveBeenCalledTimes(2);
     expect(fetch).toHaveBeenCalledWith(`${BASE}/api/v1/test/1?search=test`, expect.any(Object));
     expect(response).toEqual(result);
   });

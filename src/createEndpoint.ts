@@ -1,5 +1,5 @@
 import * as PTR from 'path-to-regexp';
-import { RequestOptions, RequestMiddleware, ResponseMiddleware } from './types';
+import { RequestOptions, RequestMiddleware, ResponseMiddleware, Middlewares } from './types';
 
 export class Endpoint<Output, Params, Data> {
   readonly path: string;
@@ -7,8 +7,10 @@ export class Endpoint<Output, Params, Data> {
   readonly queryKeysMap: [string, string][];
   readonly compile: PTR.PathFunction<object>;
   readonly options?: RequestOptions<Output, Params, Data>;
-  readonly requestMiddlewares: RequestMiddleware<Output, Params, Data>[] = [];
-  readonly responseMiddlewares: ResponseMiddleware<Output>[] = [];
+  readonly middlewares: Middlewares<Output, Params, Data> = {
+    request: [],
+    response: [],
+  };
 
   constructor(path: string, options: RequestOptions<Output, Params, Data> = {}) {
     const url = new URL(path, 'https://apidly.io');
@@ -22,12 +24,12 @@ export class Endpoint<Output, Params, Data> {
     this.compile = PTR.compile(url.pathname, { encode: encodeURIComponent });
   }
   request(middleware: RequestMiddleware<Output, Params, Data>) {
-    this.requestMiddlewares.push(middleware);
+    this.middlewares.request.push(middleware);
 
     return this;
   }
   response(middleware: ResponseMiddleware<Output>) {
-    this.responseMiddlewares.push(middleware);
+    this.middlewares.response.push(middleware);
 
     return this;
   }
