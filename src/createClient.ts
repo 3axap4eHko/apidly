@@ -1,4 +1,4 @@
-import createEvent, { Event, Unsubscribe } from 'evnty';
+import createEvent from 'evnty';
 import { RequestOptions, ApidlyRequest, ApidlyResponse, RequestMiddleware, ResponseMiddleware, Events, Middlewares, RequestType, ResponseType, RetryStrategy, Callbable } from './types';
 import { Endpoint } from './createEndpoint';
 import { jsonRequest, jsonResponse } from './dataTypes';
@@ -8,13 +8,13 @@ export interface ClientOptions<Output = any, Params = any, Data = any> extends R
   base: string;
 }
 
-async function request<Output, Params, Data>(
+const request = async <Output, Params, Data>(
   clientOptions: ClientOptions<Output, Params, Data>,
   events: Events,
   middlewares: Middlewares<Output, Params, Data>,
   endpoint: Endpoint<Output, Params, Data>,
   options: RequestOptions<Output, Params, Data> = {}
-) {
+) => {
   type RequestOptionsType = RequestOptions<Output, Params, Data>;
   const requestType = pickFirstOption<RequestOptionsType, RequestType<Output, Params, Data>>('requestType', jsonRequest, options, endpoint.options, clientOptions as any);
   const responseType = pickFirstOption<RequestOptionsType, ResponseType<Output, Params, Data>>('responseType', jsonResponse, options, endpoint.options, clientOptions as any);
@@ -82,36 +82,33 @@ async function request<Output, Params, Data>(
     await requestType(url, request);
   }
 
-  for (const requestMiddleware of [].concat(middlewares.request, endpoint.middlewares.request)) {
-    await requestMiddleware(url, request);
-  }
-
   await events.start(url, request);
 
   try {
-    const response = await retry(
+    return await retry(
       async () => {
+        for (const requestMiddleware of [].concat(middlewares.request, endpoint.middlewares.request)) {
+          await requestMiddleware(url, request);
+        }
+
         const response = (await fetch(url.href, request)) as ApidlyResponse<Output>;
         response.data = await responseType(response, request);
+        for (const responseMiddleware of [].concat(middlewares.response, endpoint.middlewares.response)) {
+          await responseMiddleware(response);
+        }
 
-        return response;
+        return response.data;
       },
       retryStrategy,
       maxRetries
     );
-
-    for (const responseMiddleware of [].concat(middlewares.response, endpoint.middlewares.response)) {
-      await responseMiddleware(response);
-    }
-
-    return response.data;
   } catch (e: any) {
     await events.error(e, url, request);
-    return null;
+    throw e;
   } finally {
     await events.done(url, request);
   }
-}
+};
 
 export class Client<CommonOutput, CommonParams, CommonData> extends Callbable {
   private events: Events;

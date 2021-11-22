@@ -7,6 +7,10 @@ export class Callbable extends Function {
   }
 }
 
+export interface ClientOptions<Output = any, Params = any, Data = any> extends RequestOptions<Output, Params, Data> {
+  base: string;
+}
+
 export interface RequestType<Output, Params, Data> {
   (url: URL, request: ApidlyRequest<Output, Params, Data>): Promise<void> | void;
 }

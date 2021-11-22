@@ -20,6 +20,10 @@ function mockFetchError(error: Error) {
   });
 }
 
+function mockFetchImplementation(fn: any) {
+  return (<jest.MockedFunction<typeof fetch>>fetch).mockImplementation(fn);
+}
+
 const BASE = 'https://localhost';
 const clientOptions: ClientOptions = {
   base: BASE,
@@ -42,10 +46,9 @@ describe('Use cases test suite', () => {
     client.onDone(doneListener);
 
     const endpoint = createEndpoint<string, { id: number }>(uri);
-    const response = await client(endpoint, { params: { id: 1 } });
+    await expect(client(endpoint, { params: { id: 1 } })).rejects.toEqual(result);
 
     expect(fetch).toHaveBeenCalledWith(`${BASE}/api/v1/test/1`, expect.any(Object));
-    expect(response).toEqual(null);
 
     expect(startListener).toHaveBeenCalled();
     expect(errorListener).toHaveBeenCalled();
@@ -132,5 +135,23 @@ describe('Use cases test suite', () => {
     expect(responseMiddleware).toHaveBeenCalledTimes(2);
     expect(fetch).toHaveBeenCalledWith(`${BASE}/api/v1/test/1?search=test`, expect.any(Object));
     expect(response).toEqual(result);
+  });
+
+  it('Should retry on fail', async () => {
+    let count = 3;
+    const reqMiddleware = jest.fn();
+    const client = createClient({ base: BASE, maxRetries: 3 }).request(reqMiddleware);
+    const endpoint = createEndpoint('/test');
+
+    mockFetchImplementation(async () => {
+      if (count--) {
+        throw new Error();
+      }
+      return new Response(JSON.stringify('OK'));
+    });
+
+    const response = await client(endpoint);
+    expect(response).toEqual('OK');
+    expect(reqMiddleware).toBeCalledTimes(4);
   });
 });

@@ -10,7 +10,43 @@ In order to use with NodeJS please pick you favorite Fetch API polyfill library 
 [![Maintainability][codeclimate-image]][codeclimate-url]
 [![Snyk][snyk-image]][snyk-url]
 
-## Usage
+## Table of Contents
+
+  - [Features](#features)
+  - [Browser Support](#browser-support)
+  - [Installing](#installing)
+  - [Examples](#examples)
+  - [License](#license)
+
+## Features
+
+- Uses Fetch API [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) (requires fetch polyfill for NodeJS)
+- Automatic transforms for JSON/Form data. Also, supports any custom data transformation
+- TypeScript support
+- Retry mechanism
+- Request and Response middlewares
+
+## Browser Support
+
+![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) |
+--- | --- | --- | --- | --- |
+Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
+
+## Installing
+
+Using yarn:
+
+```bash
+$ yarn add apidly
+```
+
+Using npm:
+
+```bash
+$ npm install apidly
+```
+
+## Examples
 
 ### Simple Example
 
@@ -38,9 +74,9 @@ import { getAccessToken } from './authorization';
 
 const client = createClient({
   base: 'https://api.example.com',
-  headers: { locale: 'en_US' }, // default client's headers
-  requestType: formRequest, // use form-urlencoded request type
-  maxRetries: 3, // retry count on fail
+  headers: { locale: 'en_US' },     // default client's headers
+  requestType: formRequest,         // use form-urlencoded request type
+  maxRetries: 3,                    // additional retries count
 }).request(async (url: URL, request: ApidlyRequest) => {
   // custom request middleware with authentication
   const token = await getAccessToken();
