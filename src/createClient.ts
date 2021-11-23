@@ -49,7 +49,7 @@ const request = async <Output, Params, Data>(
   const url = new URL(pathname, clientOptions.base);
 
   for (const [name, key] of endpoint.queryKeysMap) {
-    const value = (options.params as any)[key]?.toString();
+    const value = (params as any)[key]?.toString();
     if (typeof value !== 'undefined') {
       url.searchParams.set(name, value);
     } else {
