@@ -20,7 +20,7 @@ In order to use with NodeJS please pick you favorite Fetch API polyfill library 
 
 ## Features
 
-- Uses Fetch API [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) (requires fetch polyfill for NodeJS)
+- Uses [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) (requires fetch polyfill for NodeJS)
 - Automatic transforms for JSON/Form data. Also, supports any custom data transformation
 - TypeScript support
 - Retry mechanism
@@ -51,6 +51,7 @@ $ npm install apidly
 ### Simple Example
 
 ```typescript
+import 'cross-fetch/polyfill';
 import { createClient, createEndpoint } from 'apidly';
 
 const client = createClient({ base: 'https://api.example.com' });
@@ -63,7 +64,7 @@ interface Post {
 
 const postsListEndpoint = createEndpoint<Post[]>('/api/v1/posts');
 
-export const listPosts = () => client(postsSearchEndpoint);
+export const listPosts = () => client(postsListEndpoint);
 ```
 
 ### Advanced Example
