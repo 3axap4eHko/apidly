@@ -5,7 +5,7 @@ describe('Data types test suite', () => {
   it('Should make a json request', async () => {
     const url = new URL('https://apidly.io');
     const data = { test: 'test' };
-    const request: ApidlyRequest<any, any> = { headers: new Headers(), data };
+    const request: ApidlyRequest<any, any> = { headers: new Headers(), data, params: {} };
     await jsonRequest(url, request);
     expect(request.body).toEqual(JSON.stringify(data));
     expect(request.headers.get('content-type')).toEqual('application/json');
@@ -26,7 +26,7 @@ describe('Data types test suite', () => {
   it('Should make a form request', async () => {
     const url = new URL('https://apidly.io');
     const data = { test: 'test' };
-    const request: ApidlyRequest<any, any> = { headers: new Headers(), data };
+    const request: ApidlyRequest<any, any> = { headers: new Headers(), data, params: {} };
     await formRequest(url, request);
     expect(request.body).toEqual('test=test');
     expect(request.headers.get('content-type')).toEqual('application/x-www-form-urlencoded');

@@ -1,7 +1,7 @@
 import createEvent from 'evnty';
 import {
   ClientOptions,
-  ClientInterface,
+  Client,
   EndpointInterface,
   RequestOptions,
   ApidlyRequest,
@@ -10,6 +10,8 @@ import {
   ResponseMiddleware,
   Events,
   Middlewares,
+  MiddleWired,
+  EventWired,
   RequestType,
   ResponseType,
   RetryStrategy,
@@ -126,8 +128,7 @@ const request = async <Output, Params, Data>(
   }
 };
 
-// @ts-ignore
-export class Client<ClientParams = unknown> extends Callbable implements ClientInterface<ClientParams, never> {
+class ClientClass<ClientParams = unknown> extends Callbable implements MiddleWired<unknown, ClientParams, unknown>, EventWired<unknown, ClientParams, unknown> {
   private requestInit: RequestInitOptions<unknown, ClientParams, unknown>;
 
   constructor(clientOptions: ClientOptions<ClientParams>) {
@@ -171,5 +172,5 @@ export class Client<ClientParams = unknown> extends Callbable implements ClientI
 }
 
 export default <ClientParams>(clientOptions: ClientOptions<ClientParams>) => {
-  return new Client<ClientParams>(clientOptions);
+  return new ClientClass<ClientParams>(clientOptions) as unknown as Client<ClientParams, never>;
 };

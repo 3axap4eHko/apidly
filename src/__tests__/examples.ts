@@ -22,7 +22,10 @@ const oauthTokenEndpoint = createEndpoint<OAuthToken, never, Credentials>('/3axa
 const oauthToken = () => client(oauthTokenEndpoint);
 
 const accessTokens = new Map<string, Promise<string>>();
-const createAuthenticatedEndpoint = <Output, Params = any, Data = any>(path: string, options?: RequestOptions<Output, Partial<Params & CommonParams>, Partial<Data>>) => {
+const createAuthenticatedEndpoint = <Output, Params = any, Data = any>(
+  path: string,
+  options?: RequestOptions<Output, Partial<Params & CommonParams>, Partial<Data>>
+) => {
   return createEndpoint(path, options).request(async (url, req) => {
     if (!accessTokens.has(req.params.clientId)) {
       accessTokens.set(
@@ -65,7 +68,7 @@ interface CreatePostData {
 }
 
 const createPostNoAuth = createEndpoint<Post, void, CreatePostData>('/3axap4eHko/APIDLY.IO/1.0.0/posts', { method: 'post' });
-const createPost = createAuthenticatedEndpoint<Post, void, CreatePostData>('/3axap4eHko/APIDLY.IO/1.0.0/posts', { method: 'post' });
+const createPost = createAuthenticatedEndpoint<Post, never, CreatePostData>('/3axap4eHko/APIDLY.IO/1.0.0/posts', { method: 'post' });
 
 describe('E2E Apidly test suite', () => {
   it('Should search posts', async () => {

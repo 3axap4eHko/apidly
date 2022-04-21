@@ -10,7 +10,7 @@ export class Callbable extends Function {
 export type MaybePromise<T> = PromiseLike<T> | T;
 
 export interface ApidlyRequest<Params, Data> extends Omit<RequestInit, 'headers'> {
-  params?: Params;
+  params: Partial<Params>;
   data?: Data;
   headers: Headers;
 }
@@ -99,6 +99,9 @@ export interface RequestOptions<Output, Params, Data> extends RequestInit {
   retryStrategy?: RetryStrategy;
 }
 
-export interface ClientInterface<ClientParams, CompilerOptions> extends MiddleWired<unknown, ClientParams, unknown>, EventWired<unknown, ClientParams, unknown> {
-  <Output, Params, Data>(endpoint: EndpointInterface<Output, Params, Data, CompilerOptions>, options?: RequestOptions<Output, Params & Partial<ClientParams>, Data>): MaybePromise<Output>;
+export interface Client<ClientParams, CompilerOptions> extends MiddleWired<unknown, ClientParams, unknown>, EventWired<unknown, ClientParams, unknown> {
+  <Output, Params, Data>(
+    endpoint: EndpointInterface<Output, Params, Data, CompilerOptions>,
+    options?: RequestOptions<Output, Params & Partial<ClientParams>, Data>
+  ): MaybePromise<Output>;
 }

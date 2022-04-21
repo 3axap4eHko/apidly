@@ -1,7 +1,7 @@
 import { RequestOptions, RequestMiddleware, ResponseMiddleware, Middlewares, EndpointInterface, Compile } from './types';
 import { compile } from './utils';
 
-export class Endpoint<Output, Params, Data> implements EndpointInterface<Output, Params, Data, never> {
+class Endpoint<Output, Params, Data> implements EndpointInterface<Output, Params, Data, never> {
   readonly compilePath: ReturnType<Compile<never>>;
   readonly middlewares: Middlewares<Output, Params, Data> = {
     request: [],
