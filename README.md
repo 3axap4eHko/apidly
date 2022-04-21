@@ -28,9 +28,16 @@ In order to use with NodeJS please pick you favorite Fetch API polyfill library 
 
 ## Browser Support
 
-![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) |
+![Chrome][chrome-image] | ![Firefox][firefox-image] | ![Safari][safari-image] | ![Opera][opera-image] | ![Edge][edge-image] |
 --- | --- | --- | --- | --- |
 Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
+
+
+[chrome-image]: https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png?1
+[firefox-image]: https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png?1
+[safari-image]: https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png?1
+[opera-image]: https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png?1
+[edge-image]: https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png?1
 
 ## Installing
 
@@ -99,7 +106,7 @@ interface UpdatePostData {
   content: string;
 }
 
-const postsUpdateEndpoint = createEndpoint<Post, UpdatePostParams, UpdatePostData>('/api/v1/posts/:id', { method: 'put' });
+const postsUpdateEndpoint = createEndpoint<Post, UpdatePostParams, UpdatePostData>('/api/v1/posts/{id}', { method: 'put' });
 
 export function updatePost(id: string, post: UpdatePostData) {
   return client(postsUpdateEndpoint, { params: { id }, data: post });
@@ -108,8 +115,8 @@ export function updatePost(id: string, post: UpdatePostData) {
 
 ## License
 
-License [The MIT License](http://opensource.org/licenses/MIT)
-Copyright (c) 2021 Ivan Zakharchanka
+License [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+Copyright (c) 2021-present Ivan Zakharchanka
 
 [npm-url]: https://www.npmjs.com/package/apidly
 [downloads-image]: https://img.shields.io/npm/dw/apidly.svg?maxAge=43200

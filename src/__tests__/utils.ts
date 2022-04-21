@@ -1,4 +1,9 @@
-import { pickFirstOption, omit, sanitize, retry, defaultRetryStrategy } from '../utils';
+import { pickFirstOption, omit, sanitize, retry, defaultRetryStrategy, compile } from '../utils';
+
+const PERFORMANCE_TEST_COUNT = 1000000;
+const PERFORMANCE_TEST_URL = 'https://example.com/{value1}/{value2}/{value3}';
+const PERFORMANCE_TEST_PARAMS = { value1: 'foo', value2: 'bar', value3: 'baz' };
+const PERFORMANCE_TEST_RESULT = 'https://example.com/foo/bar/baz';
 
 describe('Utils test suite', () => {
   it('Should pickFirstOption if exists', () => {
@@ -42,5 +47,36 @@ describe('Utils test suite', () => {
     });
     await expect(retry(fn, defaultRetryStrategy, 1)).rejects.toEqual(error);
     expect(fn).toHaveBeenCalledTimes(2);
+  });
+
+  it('Should compile url', async () => {
+    const build = compile('https://example.com/{encoded}/[preserved]/?query={query}');
+
+    const fullExample = build({ encoded: '@', preserved: '@', query: 'query' });
+    expect(fullExample).toEqual('https://example.com/%40/@/?query=query');
+
+    const partialExample = build({ encoded: '@' });
+    expect(partialExample).toEqual('https://example.com/%40//?query=');
+  });
+
+  it('Should do the trick url', async () => {
+    const build = compile('https://example.com/{value1.toLowerCase()}/{value2?.toLowerCase()}');
+
+    const partialExample = build({ value1: 'Test' });
+    expect(partialExample).toEqual('https://example.com/test/');
+  });
+
+  it('Should check performance test validity', async () => {
+    const build = compile(PERFORMANCE_TEST_URL);
+    const test = build(PERFORMANCE_TEST_PARAMS);
+    expect(test).toEqual(PERFORMANCE_TEST_RESULT);
+  });
+
+  it(`Should do performance test for ${PERFORMANCE_TEST_COUNT} samples`, async () => {
+    let i = PERFORMANCE_TEST_COUNT;
+    const build = compile(PERFORMANCE_TEST_URL);
+    while (--i) {
+      build(PERFORMANCE_TEST_PARAMS);
+    }
   });
 });

@@ -1,7 +1,8 @@
 /.idea
 /.github
 /coverage
-/src
+/src/__tests__
+/src/__mocks__
 /jest.*
 /*.log*
 /tsconfig.json

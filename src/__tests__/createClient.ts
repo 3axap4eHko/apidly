@@ -1,4 +1,4 @@
-import createClient, { ClientOptions } from '../createClient';
+import createClient from '../createClient';
 
 describe('Client test suite', () => {
   it('Should create a Client', () => {
@@ -9,7 +9,7 @@ describe('Client test suite', () => {
 
   it('Should set properties', () => {
     const base = 'https://example.com';
-    const options: ClientOptions<any, {}, void> = { base };
+    const options = { base };
 
     const client = createClient(options);
     expect(typeof client.onStart).toBe('function');

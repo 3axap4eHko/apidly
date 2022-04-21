@@ -36,3 +36,14 @@ export const retry = async <T>(fn: () => T | Promise<T>, retryStrategy: RetryStr
     }
   }
 };
+
+export const compile = <T = Record<string, any>>(pattern: string) => {
+  return Function(
+    'params',
+    'return "' +
+    pattern
+      .replace(/\{([^\}]+)}/g, '" + (typeof params.$1 === "undefined" ? "" : encodeURIComponent(params.$1)) + "')
+      .replace(/\[([^\]]+)\]/g, '" + (typeof params.$1 === "undefined" ? "" : params.$1) + "') +
+    '";'
+  ) as (params: T) => string;
+};

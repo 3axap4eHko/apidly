@@ -13,5 +13,5 @@ module.exports = {
     '__tests__',
   ],
   coverageDirectory: './coverage',
-  setupFiles: ['<rootDir>/jest.setup.js'],
+  setupFiles: ['cross-fetch/polyfill'],
 };

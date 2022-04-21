@@ -1,40 +1,28 @@
-import * as PTR from 'path-to-regexp';
-import { RequestOptions, RequestMiddleware, ResponseMiddleware, Middlewares } from './types';
+import { RequestOptions, RequestMiddleware, ResponseMiddleware, Middlewares, MiddleWired, EndpointInterface, Compile } from './types';
+import { compile } from './utils';
 
-export class Endpoint<Output, Params, Data> {
-  readonly path: string;
-  readonly pathKeys: string[];
-  readonly queryKeysMap: [string, string][];
-  readonly compile: PTR.PathFunction<object>;
-  readonly options?: RequestOptions<Output, Params, Data>;
+export class Endpoint<Output, Params, Data> implements MiddleWired<Output, Params, Data> {
+  readonly compilePath: ReturnType<Compile<never>>;
   readonly middlewares: Middlewares<Output, Params, Data> = {
     request: [],
     response: [],
   };
 
-  constructor(path: string, options: RequestOptions<Output, Params, Data> = {}) {
-    const url = new URL(path, 'https://apidly.io');
-    const paramsKeys: PTR.Key[] = [];
-    PTR.pathToRegexp(url.pathname, paramsKeys);
-
-    this.path = path;
-    this.options = options;
-    this.pathKeys = paramsKeys.map(({ name }) => name.toString());
-    this.queryKeysMap = [...url.searchParams.entries()].map(([key, value]) => [key, value.replace(/^:/, '')]);
-    this.compile = PTR.compile(url.pathname, { encode: encodeURIComponent });
+  constructor(public readonly path: string, public readonly options: RequestOptions<Output, Params, Data> = {}) {
+    this.compilePath = compile(path);
   }
-  request(middleware: RequestMiddleware<Output, Params, Data>) {
+  request(middleware: RequestMiddleware<Params, Data>) {
     this.middlewares.request.push(middleware);
 
     return this;
   }
-  response(middleware: ResponseMiddleware<Output>) {
+  response(middleware: ResponseMiddleware<Output, Params, Data>) {
     this.middlewares.response.push(middleware);
 
     return this;
   }
 }
 
-export default <Output, Params = any, Data = any>(path: string, options?: RequestOptions<Output, Params, Data>) => {
+export default <Output, Params = any, Data = any>(path: string, options?: RequestOptions<Output, Params, Data>): EndpointInterface<Output, Params, Data, never> => {
   return new Endpoint<Output, Params, Data>(path, options);
 };

@@ -1,4 +1,3 @@
-import { RequestOptions } from '../types';
 import createEndpoint from '../createEndpoint';
 
 describe('Endpoint test suite', () => {
@@ -7,23 +6,24 @@ describe('Endpoint test suite', () => {
   });
 
   it('Should create an Endpoint', () => {
-    const route = '/post/:id?fields=:fields';
-    const options: RequestOptions<any, { id: number; fields: string }, {}> = {
-      data: {},
+    type Output = any;
+    type Params = { id: number; fields: string };
+    type Data = { content: string };
+    const route = '/post/{id}?fields={fields}';
+    const options = {
+      data: { content: 'test' },
       params: { id: 1, fields: 'title' },
     };
     const reqMiddleware = jest.fn();
     const resMiddleware = jest.fn();
-    const endpoint = createEndpoint(route, options).request(reqMiddleware).response(resMiddleware);
+    const endpoint = createEndpoint<Output, Params, Data>(route, options).request(reqMiddleware).response(resMiddleware);
 
     expect(endpoint.path).toEqual(route);
     expect(endpoint.options).toEqual(options);
-    expect(endpoint.pathKeys).toEqual(['id']);
-    expect(endpoint.queryKeysMap).toEqual([['fields', 'fields']]);
     expect(endpoint.middlewares.request).toContain(reqMiddleware);
     expect(endpoint.middlewares.response).toContain(resMiddleware);
 
-    const path = endpoint.compile(options.params);
-    expect(path).toEqual('/post/1');
+    const path = endpoint.compilePath(options.params);
+    expect(path).toEqual('/post/1?fields=title');
   });
 });

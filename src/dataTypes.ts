@@ -1,11 +1,11 @@
 import { RequestMiddleware, ApidlyRequest } from './types';
 
-export const jsonRequest = <Output, Params, Data>(url: URL, request: ApidlyRequest<Output, Params, Data>) => {
+export const jsonRequest = <Params, Data>(url: URL, request: ApidlyRequest<Params, Data>) => {
   request.body = JSON.stringify(request.data);
   request.headers.set('content-type', 'application/json');
 };
 
-export const formRequest: RequestMiddleware<any, any, any> = (url, request) => {
+export const formRequest: RequestMiddleware<any, any> = (url, request) => {
   const form = new URLSearchParams(Object.entries(request.data));
   request.body = form.toString();
   request.headers.set('content-type', 'application/x-www-form-urlencoded');
