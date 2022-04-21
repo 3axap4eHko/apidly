@@ -11,7 +11,7 @@ export const formRequest: RequestMiddleware<any, any> = (url, request) => {
   request.headers.set('content-type', 'application/x-www-form-urlencoded');
 };
 
-export const jsonResponse = async <Output, Params, Data>(response: Response): Promise<Output> => {
+export const jsonResponse = async <Output>(response: Response): Promise<Output> => {
   const text = await response.text();
   try {
     return JSON.parse(text);
@@ -20,6 +20,6 @@ export const jsonResponse = async <Output, Params, Data>(response: Response): Pr
   }
 };
 
-export const textResponse = async <Output, Params, Data>(response: Response): Promise<Output> => {
+export const textResponse = async <Output>(response: Response): Promise<Output> => {
   return response.text() as unknown as Output;
 };

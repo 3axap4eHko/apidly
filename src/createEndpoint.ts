@@ -1,7 +1,7 @@
-import { RequestOptions, RequestMiddleware, ResponseMiddleware, Middlewares, MiddleWired, EndpointInterface, Compile } from './types';
+import { RequestOptions, RequestMiddleware, ResponseMiddleware, Middlewares, EndpointInterface, Compile } from './types';
 import { compile } from './utils';
 
-export class Endpoint<Output, Params, Data> implements MiddleWired<Output, Params, Data> {
+export class Endpoint<Output, Params, Data> implements EndpointInterface<Output, Params, Data, never> {
   readonly compilePath: ReturnType<Compile<never>>;
   readonly middlewares: Middlewares<Output, Params, Data> = {
     request: [],
@@ -23,6 +23,6 @@ export class Endpoint<Output, Params, Data> implements MiddleWired<Output, Param
   }
 }
 
-export default <Output, Params = any, Data = any>(path: string, options?: RequestOptions<Output, Params, Data>): EndpointInterface<Output, Params, Data, never> => {
+export default <Output, Params = any, Data = any>(path: string, options?: RequestOptions<Output, Params, Data>) => {
   return new Endpoint<Output, Params, Data>(path, options);
 };

@@ -10,18 +10,16 @@ import {
   ResponseMiddleware,
   Events,
   Middlewares,
-  MiddleWired,
   RequestType,
   ResponseType,
   RetryStrategy,
   Callbable,
-  EventWired,
-  Compile
+  Compile,
 } from './types';
 import { jsonRequest, jsonResponse } from './dataTypes';
 import { pickFirstOption, sanitize, defaultRetryStrategy, retry, compile } from './utils';
 
-export interface RequestInitOptions<Output, Params, Data> extends ClientOptions<Params>, Middlewares<Output, Params, Data>, Events {
+interface RequestInitOptions<Output, Params, Data> extends ClientOptions<Params>, Middlewares<Output, Params, Data>, Events {
   compileBase: ReturnType<Compile<never>>;
 }
 
@@ -32,7 +30,13 @@ const request = async <Output, Params, Data>(
 ) => {
   type RequestOptionsType = RequestOptions<Output, Partial<Params>, Partial<Data>>;
   const requestType = pickFirstOption<RequestOptionsType, RequestType<Params, Data>>('requestType', jsonRequest, options, endpoint.options, init as any);
-  const responseType = pickFirstOption<RequestOptionsType, ResponseType<Output, Params, Data>>('responseType', jsonResponse, options, endpoint.options, init as any);
+  const responseType = pickFirstOption<RequestOptionsType, ResponseType<Output, Params, Data>>(
+    'responseType',
+    jsonResponse,
+    options,
+    endpoint.options,
+    init as any
+  );
   const maxRetries = pickFirstOption<RequestOptionsType, number>('maxRetries', 0, options, endpoint.options, init as any);
   const retryStrategy = pickFirstOption<RequestOptionsType, RetryStrategy>('retryStrategy', defaultRetryStrategy, options, endpoint.options, init as any);
   const cache = pickFirstOption<RequestOptionsType, RequestCache>('cache', void 0, options, endpoint.options, init as any);
@@ -122,11 +126,11 @@ const request = async <Output, Params, Data>(
   }
 };
 
-export class Client<ClientParams> extends Callbable implements MiddleWired<unknown, ClientParams, unknown>, EventWired<unknown, ClientParams, unknown> {
+// @ts-ignore
+export class Client<ClientParams = unknown> extends Callbable implements ClientInterface<ClientParams, never> {
   private requestInit: RequestInitOptions<unknown, ClientParams, unknown>;
 
   constructor(clientOptions: ClientOptions<ClientParams>) {
-
     const requestInit: RequestInitOptions<unknown, ClientParams, unknown> = {
       ...clientOptions,
       start: createEvent(),
@@ -135,7 +139,7 @@ export class Client<ClientParams> extends Callbable implements MiddleWired<unkno
       done: createEvent(),
       request: [] as RequestMiddleware<ClientParams, unknown>[],
       response: [] as ResponseMiddleware<unknown, ClientParams, unknown>[],
-      compileBase: compile(clientOptions.base)
+      compileBase: compile(clientOptions.base),
     };
 
     super(request.bind(null, requestInit));
@@ -166,6 +170,6 @@ export class Client<ClientParams> extends Callbable implements MiddleWired<unkno
   }
 }
 
-export default <ClientParams>(clientOptions: ClientOptions<ClientParams>): ClientInterface<ClientParams, never> => {
-  return new Client<ClientParams>(clientOptions) as any;
+export default <ClientParams>(clientOptions: ClientOptions<ClientParams>) => {
+  return new Client<ClientParams>(clientOptions);
 };
