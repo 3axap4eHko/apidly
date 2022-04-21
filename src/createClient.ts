@@ -1,8 +1,8 @@
 import createEvent from 'evnty';
 import {
   ClientOptions,
-  Client,
-  EndpointInterface,
+  Client as ClientInterface,
+  Endpoint,
   RequestOptions,
   ApidlyRequest,
   ApidlyResponse,
@@ -22,12 +22,12 @@ import { jsonRequest, jsonResponse } from './dataTypes';
 import { pickFirstOption, sanitize, defaultRetryStrategy, retry, compile } from './utils';
 
 interface RequestInitOptions<Output, Params, Data> extends ClientOptions<Params>, Middlewares<Output, Params, Data>, Events {
-  compileBase: ReturnType<Compile<never>>;
+  compileBase: ReturnType<Compile>;
 }
 
 const request = async <Output, Params, Data>(
   init: RequestInitOptions<Output, Params, Data>,
-  endpoint: EndpointInterface<Output, Params, Data, never>,
+  endpoint: Endpoint<Output, Params, Data>,
   options: RequestOptions<Output, Params, Data> = {}
 ) => {
   type RequestOptionsType = RequestOptions<Output, Partial<Params>, Partial<Data>>;
@@ -111,7 +111,7 @@ const request = async <Output, Params, Data>(
         const response = (await fetch(url.href, request)) as ApidlyResponse<Output>;
         response.data = await responseType(response, url, request);
         for (const responseMiddleware of [].concat(init.response, endpoint.middlewares.response)) {
-          await responseMiddleware(response);
+          await responseMiddleware(response, url, request);
         }
         await init.success(response, url, request);
 
@@ -128,7 +128,7 @@ const request = async <Output, Params, Data>(
   }
 };
 
-class ClientClass<ClientParams = unknown> extends Callbable implements MiddleWired<unknown, ClientParams, unknown>, EventWired<unknown, ClientParams, unknown> {
+class Client<ClientParams = unknown> extends Callbable implements MiddleWired<unknown, ClientParams, unknown>, EventWired<unknown, ClientParams, unknown> {
   private requestInit: RequestInitOptions<unknown, ClientParams, unknown>;
 
   constructor(clientOptions: ClientOptions<ClientParams>) {
@@ -172,5 +172,5 @@ class ClientClass<ClientParams = unknown> extends Callbable implements MiddleWir
 }
 
 export default <ClientParams>(clientOptions: ClientOptions<ClientParams>) => {
-  return new ClientClass<ClientParams>(clientOptions) as unknown as Client<ClientParams, never>;
+  return new Client<ClientParams>(clientOptions) as unknown as ClientInterface<ClientParams>;
 };

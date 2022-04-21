@@ -71,12 +71,12 @@ export interface EndpointOptions<Output, EndpointParams, Data> extends RequestIn
   retryStrategy?: RetryStrategy;
 }
 
-export interface Compile<T> {
-  <Params = Record<string, any>>(pattern: string): (params: Params, options?: T) => string;
+export interface Compile {
+  <Params = Record<string, any>>(pattern: string): (params: Params) => string;
 }
-export interface EndpointInterface<Output, EndpointParams, Data, CompilerOptions> extends MiddleWired<Output, EndpointParams, Data> {
+export interface Endpoint<Output, EndpointParams, Data> extends MiddleWired<Output, EndpointParams, Data> {
   readonly path: string;
-  readonly compilePath: ReturnType<Compile<CompilerOptions>>;
+  readonly compilePath: ReturnType<Compile>;
   readonly options: RequestOptions<Output, EndpointParams, Data>;
   readonly middlewares: Middlewares<Output, EndpointParams, Data>;
 }
@@ -99,9 +99,6 @@ export interface RequestOptions<Output, Params, Data> extends RequestInit {
   retryStrategy?: RetryStrategy;
 }
 
-export interface Client<ClientParams, CompilerOptions> extends MiddleWired<unknown, ClientParams, unknown>, EventWired<unknown, ClientParams, unknown> {
-  <Output, Params, Data>(
-    endpoint: EndpointInterface<Output, Params, Data, CompilerOptions>,
-    options?: RequestOptions<Output, Params & Partial<ClientParams>, Data>
-  ): MaybePromise<Output>;
+export interface Client<ClientParams> extends MiddleWired<unknown, ClientParams, unknown>, EventWired<unknown, ClientParams, unknown> {
+  <Output, Params, Data>(endpoint: Endpoint<Output, Params, Data>, options?: RequestOptions<Output, Params & Partial<ClientParams>, Data>): Promise<Output>;
 }
