@@ -1,6 +1,12 @@
 import { Event, Unsubscribe } from 'evnty';
 
-export class Callbable extends Function {
+interface Callable {
+  (...args: any[]): Promise<void>;
+}
+
+const CallableFunction = Function as Callable & FunctionConstructor;
+
+export class Callbable extends CallableFunction {
   constructor(func: Function) {
     super();
     return Object.setPrototypeOf(func, new.target.prototype);
@@ -49,11 +55,11 @@ export interface MiddleWired<Output, Params, Data> {
   response(middleware: ResponseMiddleware<Output, Params, Data>): this;
 }
 
-export interface Events {
-  start: Event;
-  success: Event;
-  error: Event;
-  done: Event;
+export interface Events<Output, Params, Data> {
+  start: Event<[URL, ApidlyRequest<Params, Data>]>;
+  success: Event<[ApidlyResponse<Output>, URL, ApidlyRequest<Params, Data>]>;
+  error: Event<[Error, URL, ApidlyRequest<Params, Data>]>;
+  done: Event<[URL, ApidlyRequest<Params, Data>]>;
 }
 
 export interface EventWired<Output, Params, Data> {
@@ -74,12 +80,6 @@ export interface EndpointOptions<Output, EndpointParams, Data> extends RequestIn
 export interface Compile {
   <Params = Record<string, any>>(pattern: string): (params: Params) => string;
 }
-export interface Endpoint<Output, EndpointParams, Data> extends MiddleWired<Output, EndpointParams, Data> {
-  readonly path: string;
-  readonly compilePath: ReturnType<Compile>;
-  readonly options: RequestOptions<Output, EndpointParams, Data>;
-  readonly middlewares: Middlewares<Output, EndpointParams, Data>;
-}
 
 export interface ClientOptions<ClientParams> extends RequestInit {
   base: string;
@@ -97,8 +97,4 @@ export interface RequestOptions<Output, Params, Data> extends RequestInit {
   responseType?: ResponseType<Output, Params, Data>;
   maxRetries?: number;
   retryStrategy?: RetryStrategy;
-}
-
-export interface Client<ClientParams> extends MiddleWired<unknown, ClientParams, unknown>, EventWired<unknown, ClientParams, unknown> {
-  <Output, Params, Data>(endpoint: Endpoint<Output, Params, Data>, options?: RequestOptions<Output, Params & Partial<ClientParams>, Data>): Promise<Output>;
 }

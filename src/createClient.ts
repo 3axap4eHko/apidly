@@ -1,8 +1,6 @@
 import createEvent from 'evnty';
 import {
   ClientOptions,
-  Client as ClientInterface,
-  Endpoint,
   RequestOptions,
   ApidlyRequest,
   ApidlyResponse,
@@ -18,10 +16,11 @@ import {
   Callbable,
   Compile,
 } from './types';
+import { Endpoint } from './createEndpoint';
 import { jsonRequest, jsonResponse } from './dataTypes';
 import { pickFirstOption, sanitize, defaultRetryStrategy, retry, compile } from './utils';
 
-interface RequestInitOptions<Output, Params, Data> extends ClientOptions<Params>, Middlewares<Output, Params, Data>, Events {
+interface RequestInitOptions<Output, Params, Data> extends ClientOptions<Params>, Middlewares<Output, Params, Data>, Events<Output, Params, Data> {
   compileBase: ReturnType<Compile>;
 }
 
@@ -128,7 +127,10 @@ const request = async <Output, Params, Data>(
   }
 };
 
-class Client<ClientParams = unknown> extends Callbable implements MiddleWired<unknown, ClientParams, unknown>, EventWired<unknown, ClientParams, unknown> {
+export interface Client<ClientParams> extends MiddleWired<unknown, ClientParams, unknown>, EventWired<unknown, ClientParams, unknown> {
+  <Output, Params, Data>(endpoint: Endpoint<Output, Params, Data>, options?: RequestOptions<Output, Params & Partial<ClientParams>, Data>): Promise<Output>;
+}
+export class Client<ClientParams = unknown> extends Callbable {
   private requestInit: RequestInitOptions<unknown, ClientParams, unknown>;
 
   constructor(clientOptions: ClientOptions<ClientParams>) {
@@ -172,5 +174,5 @@ class Client<ClientParams = unknown> extends Callbable implements MiddleWired<un
 }
 
 export default <ClientParams>(clientOptions: ClientOptions<ClientParams>) => {
-  return new Client<ClientParams>(clientOptions) as unknown as ClientInterface<ClientParams>;
+  return new Client<ClientParams>(clientOptions);
 };
