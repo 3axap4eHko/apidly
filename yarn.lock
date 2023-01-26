@@ -1066,9 +1066,9 @@ camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001400:
-  version "1.0.30001447"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001447.tgz#ef1f39ae38d839d7176713735a8e467a0a2523bd"
-  integrity sha512-bdKU1BQDPeEXe9A39xJnGtY0uRq/z5osrnXUw0TcK+EYno45Y+U7QU9HhHEyzvMDffpYadFXi3idnSNkcwLkTw==
+  version "1.0.30001448"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001448.tgz#ca7550b1587c92a392a2b377cd9c508b3b4395bf"
+  integrity sha512-tq2YI+MJnooG96XpbTRYkBxLxklZPOdLmNIOdIhvf7SNJan6u5vCKum8iT7ZfCt70m1GPkuC7P3TtX6UuhupuA==
 
 chalk@^2.0.0:
   version "2.4.2"
@@ -1539,9 +1539,9 @@ esutils@^2.0.2:
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
 evnty@^0.8.30:
-  version "0.8.87"
-  resolved "https://registry.yarnpkg.com/evnty/-/evnty-0.8.87.tgz#6f44bc7803d449c9f05ae071cf9eff02d88b6b65"
-  integrity sha512-Q/FIZZqc0rHL0/Taay/TLyic/vbqSXJqFp4QRgTF80AsftcotQM2sK7848YZEu7iggJMDSoG5JGWIt1uby2Cjg==
+  version "0.8.88"
+  resolved "https://registry.yarnpkg.com/evnty/-/evnty-0.8.88.tgz#0c7f2f74baec32484c6a8f3a1e33d64008f63317"
+  integrity sha512-vbC1bRxDCagRKk2Ztim5TqPaHIN6fAKahscUyM1xaK2oPmJB/YS441xGo7krfxn7m49+Ht37z8SmeVPN60uGeg==
 
 execa@^4.0.0:
   version "4.1.0"
