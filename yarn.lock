@@ -1539,9 +1539,9 @@ esutils@^2.0.2:
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
 evnty@^0.8.30:
-  version "0.8.88"
-  resolved "https://registry.yarnpkg.com/evnty/-/evnty-0.8.88.tgz#0c7f2f74baec32484c6a8f3a1e33d64008f63317"
-  integrity sha512-vbC1bRxDCagRKk2Ztim5TqPaHIN6fAKahscUyM1xaK2oPmJB/YS441xGo7krfxn7m49+Ht37z8SmeVPN60uGeg==
+  version "0.8.89"
+  resolved "https://registry.yarnpkg.com/evnty/-/evnty-0.8.89.tgz#511788743e422957706ca4c40372ca24854b1a1b"
+  integrity sha512-yVQQ1rN0a01/PpEwh0Zb91Kqjz3W32+RQaRR6UzbVbF6aWRUdc80pcbdzhc4tBjZBpqFcPWr5WaX2beARX606g==
 
 execa@^4.0.0:
   version "4.1.0"
